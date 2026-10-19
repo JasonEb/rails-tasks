@@ -67,6 +67,13 @@ RSpec.describe "Comments API", type: :request do
       expect(task.reload.comments_count).to eq(1)
     end
 
+    it "broadcasts the new comment to the task's live stream" do
+      expect {
+        post "/api/v1/tasks/#{task.id}/comments", params: { comment: { body: "Hi all" } },
+                                                  headers: auth_headers(user), as: :json
+      }.to have_broadcasted_to("task:#{task.id}:comments").with(hash_including("type" => "comment.created"))
+    end
+
     it "returns 422 for an empty body" do
       post "/api/v1/tasks/#{task.id}/comments", params: { comment: { body: "" } },
                                                 headers: auth_headers(user), as: :json
