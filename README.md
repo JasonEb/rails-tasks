@@ -1,6 +1,6 @@
 # Realtime Tasks
 
-A Rails 8 JSON API for a shared task list with realtime comments, backed by PostgreSQL and Redis. A minimal React client will be added under `client/`.
+A Rails 8 JSON API for a shared task list with realtime comments, backed by PostgreSQL and Redis. A minimal React client lives in `client/`.
 
 Built test-first: model specs, then request specs, then the code that makes them pass. See [docs/architecture.md](docs/architecture.md) for the system design.
 
@@ -30,6 +30,16 @@ Comments are pushed to subscribers over Action Cable, which uses Redis pub/sub s
 3. You'll receive `{"type": "comment.created", "comment": {...}}` and `{"type": "comment.deleted", "comment": {"id": ..., "task_id": ...}}`.
 
 Broadcasts happen after the database transaction commits, so a rolled-back comment is never pushed. WebSocket connections are only accepted from `CLIENT_ORIGIN` (default `http://localhost:5173`).
+
+## React client
+
+`client/` holds a minimal Vite + React + TypeScript app. With the API running on port 3000:
+
+```sh
+cd client && npm install && npm run dev   # http://localhost:5173
+```
+
+Open it in two browsers, sign in as two users, and comments on the same task appear in both as they are posted. See [client/README.md](client/README.md).
 
 ## Roadmap
 
