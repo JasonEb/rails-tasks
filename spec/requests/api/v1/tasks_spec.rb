@@ -60,8 +60,8 @@ RSpec.describe "Tasks API", type: :request do
       expect(json["errors"]["title"]).to be_present
     end
 
-    it "returns 400 when the task key is missing" do
-      post "/api/v1/tasks", params: { title: "No wrapper" }, headers: auth_headers(user), as: :json
+    it "returns 400 when no task attributes are sent" do
+      post "/api/v1/tasks", params: { unknown: "field" }, headers: auth_headers(user), as: :json
 
       expect(response).to have_http_status(:bad_request)
     end

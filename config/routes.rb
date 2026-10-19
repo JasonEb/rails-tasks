@@ -6,6 +6,8 @@ Rails.application.routes.draw do
       resources :users, only: :create
       resources :sessions, only: :create
       get "me", to: "users#me"
+
+      resources :tasks, only: %i[index show create update destroy]
     end
   end
 end
