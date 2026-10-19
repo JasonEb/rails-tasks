@@ -21,6 +21,16 @@ bin/rails server
 
 Database settings come from `DATABASE_HOST`, `DATABASE_PORT`, `DATABASE_USERNAME` and `DATABASE_PASSWORD` (defaults: `localhost`, `5432`, `postgres`, `postgres`). Redis comes from `REDIS_URL` (default `redis://localhost:6379/1`).
 
+## Realtime comments
+
+Comments are pushed to subscribers over Action Cable, which uses Redis pub/sub so every Rails process sees every message.
+
+1. Connect to `ws://localhost:3000/cable?token=<auth_token>`. Browsers can't set headers on a WebSocket, so the token goes in the query string.
+2. Subscribe with the identifier `{"channel": "TaskCommentsChannel", "task_id": 1}`.
+3. You'll receive `{"type": "comment.created", "comment": {...}}` and `{"type": "comment.deleted", "comment": {"id": ..., "task_id": ...}}`.
+
+Broadcasts happen after the database transaction commits, so a rolled-back comment is never pushed. WebSocket connections are only accepted from `CLIENT_ORIGIN` (default `http://localhost:5173`).
+
 ## Roadmap
 
 1. Scaffold and test setup
