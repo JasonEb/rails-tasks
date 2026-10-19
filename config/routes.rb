@@ -7,7 +7,10 @@ Rails.application.routes.draw do
       resources :sessions, only: :create
       get "me", to: "users#me"
 
-      resources :tasks, only: %i[index show create update destroy]
+      resources :tasks, only: %i[index show create update destroy] do
+        resources :comments, only: %i[index create]
+      end
+      resources :comments, only: :destroy
     end
   end
 end
