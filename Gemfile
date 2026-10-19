@@ -47,3 +47,5 @@ end
 group :test do
   gem "shoulda-matchers", "~> 6.0"
 end
+
+gem "alba", "~> 4.0"
